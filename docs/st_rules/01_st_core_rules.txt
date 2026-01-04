@@ -1,0 +1,91 @@
+1. FORBIDDEN CONSTRUCTS (18 Rules)
+RULE: Do not use CONFIGURATION keyword in structured text programs.
+RULE: Do not use RESOURCE keyword in structured text programs.
+RULE: Do not use TASK keyword in structured text programs.
+RULE: Do not declare variables inline within executable code sections.
+RULE: Do not use GOTO statements in structured text programs.
+RULE: Do not use pointer data types in VAR_GLOBAL_CONSTANT or VAR_CONSTANT declarations.
+RULE: Do not use VAR_EXTERNAL or VAR_EXTERNAL_CONSTANT declarations.
+RULE: Do not use VAR_ACCESS declarations.
+RULE: Do not use AT declarations for direct device addressing in label definitions.
+RULE: Do not use PRAGMA directives.
+RULE: Do not use inline assembly or machine code.
+RULE: Do not use multiple assignment statements on a single line without semicolon separators.
+RULE: Do not use EXIT statement outside of iteration statements.
+RULE: Do not use CONTINUE statement.
+RULE: Do not nest multi-line comments.
+RULE: Do not use ELSIF without a preceding IF.
+RULE: Do not use ELSE without a preceding IF or ELSIF.
+RULE: Do not use END_IF without a corresponding IF statement.
+________________________________________
+2. REQUIRED SYNTAX RULES (9 Rules)
+RULE: Every statement must end with a semicolon.
+RULE: All variables must be declared before use in the label editor or within the POU variable declaration section.
+RULE: Use the assignment operator := for all assignments.
+RULE: Use parentheses to override default operator precedence when necessary.
+RULE: Control structure keywords IF, CASE, FOR, WHILE, REPEAT must have corresponding END keywords.
+RULE: Each CASE statement must have at least one case branch or an ELSE branch.
+RULE: FOR loops must specify TO and optionally BY clauses.
+RULE: WHILE loops must have a boolean exit condition.
+RULE: REPEAT loops must have an UNTIL condition.
+________________________________________
+3. NAMING AND IDENTIFIER RULES (2 Rules)
+RULE: Label names must use only ASCII alphanumeric characters and underscores.
+RULE: Label names must not start with a digit but may contain digits after the first character.
+________________________________________
+4. AUTOMATIC CONVERSIONS (3 Rules)
+RULE: All ST language keywords are automatically converted to uppercase during program conversion.
+RULE: All operator symbols are automatically converted to uppercase during program conversion.
+RULE: The literals TRUE and FALSE are automatically converted to uppercase during program conversion.
+________________________________________
+5. WHITESPACE AND FORMATTING (4 Rules)
+RULE: Spaces, tabs, and line feeds can be inserted anywhere between operators and data.
+RULE: A maximum of 1024 operators can be used in a single statement.
+RULE: A maximum line length of 1024 characters is allowed per line.
+RULE: A maximum of 64000 steps per POU is allowed for FX5U with 64K program capacity setting.
+________________________________________
+6. COMMENT RULES (2 Rules)
+RULE: Single-line comments start with // and continue to the end of the line.
+RULE: Multi-line comments are enclosed in (* and ) or / and */.
+________________________________________
+7. DATA TYPE RULES (5 Rules)
+RULE: Bit type literal values are TRUE and FALSE only.
+RULE: Numeric type suffixes are optional but when used must match the target data type.
+RULE: String literals are enclosed in single quotes for STRING type.
+RULE: Array declarations use the format ARRAY[start..end] OF datatype.
+RULE: Structure members are accessed using dot notation structname.membername.
+________________________________________
+8. TYPE CONVERSION RULES (4 Rules)
+RULE: Widening type conversions from smaller to larger data types occur automatically.
+RULE: Narrowing type conversions from larger to smaller data types require explicit conversion functions.
+RULE: Conversion between signed and unsigned types of the same size requires explicit conversion functions.
+RULE: Special device types S and BL require explicit type conversion functions even for same-size transfers.
+________________________________________
+9. ASSIGNMENT RULES (3 Rules)
+RULE: The left side of an assignment must be a variable, not a constant or expression.
+RULE: The right side of an assignment must evaluate to a data type compatible with the left side.
+RULE: Array assignment requires identical element type and element count on both sides.
+________________________________________
+10. DEVICE RULES (4 Rules)
+RULE: Device type specifiers :U, :D, :UD, :E, :ED can only be applied to D, W, U\G, and R devices.
+RULE: Device type specifier :U forces interpretation as unsigned 16-bit.
+RULE: Device type specifier :D forces interpretation as signed 32-bit.
+RULE: Device type specifier :UD forces interpretation as unsigned 32-bit.
+________________________________________
+11. CONTROL STRUCTURES ALLOWED (6 Rules)
+RULE: IF-THEN-ELSE-END_IF structures are allowed for conditional branching.
+RULE: CASE-OF-END_CASE structures are allowed for multi-way branching.
+RULE: FOR-TO-BY-DO-END_FOR loops are allowed for counted iteration.
+RULE: WHILE-DO-END_WHILE loops are allowed for pre-test iteration.
+RULE: REPEAT-UNTIL-END_REPEAT loops are allowed for post-test iteration.
+RULE: RETURN statements are allowed to exit from functions and function blocks early.
+________________________________________
+12. OPERATORS ALLOWED (4 Rules)
+RULE: Arithmetic operators +, -, *, /, MOD are allowed for numeric calculations.
+RULE: Comparison operators =, <>, <, >, <=, >= are allowed for relational tests.
+RULE: Logical operators AND, OR, XOR, NOT are allowed for boolean operations.
+RULE: Parentheses can be used to group expressions and override default precedence.
+________________________________________
+13. SPECIAL EXECUTION RULES (2 Rules)
+RULE: MC (Master Control) and MCR (Master Control Reset) instructions affect execution but do not alter structured text syntax.
+RULE: Inline ST restrictions apply when ST code is embedded in ladder or FBD programs, limiting use of certain instructions and POUs.

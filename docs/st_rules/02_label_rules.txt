@@ -1,0 +1,188 @@
+1. GLOBAL LABEL RULES
+RULE: Use global labels (VAR_GLOBAL) for data shared between multiple program blocks and function blocks.
+RULE: Use VAR_GLOBAL only for primitive, array, structure, or function block instance data that must be visible project wide.
+RULE: Use VAR_GLOBAL_CONSTANT only for project wide constants that never change at runtime.
+RULE: Do not define arrays or structures as VAR_GLOBAL_CONSTANT.
+RULE: Use VAR_GLOBAL_RETAIN only for project wide data that must be latched across power cycles.
+RULE: Do not define function block instances as VAR_GLOBAL_RETAIN.
+________________________________________
+2. PROGRAM BLOCK LOCAL LABEL RULES
+RULE: Use VAR in a program block for working variables that are used only inside that program block.
+RULE: Use VAR only for primitive, array, structure, or function block instances local to the program block.
+RULE: Use VAR_CONSTANT in a program block only for local constants that do not change.
+RULE: Do not define arrays or structures as VAR_CONSTANT.
+RULE: Use VAR_RETAIN in a program block only for local latch data that must be retained across scans or power cycles.
+________________________________________
+3. FUNCTION LOCAL LABEL RULES
+RULE: Use VAR in a function only for local scratch variables that exist per call and are not retained.
+RULE: Do not define timer, retentive timer, long timer, long retentive timer, counter, or long counter types as VAR in a function.
+RULE: Use VAR_CONSTANT in a function only for compile time constants used by that function.
+RULE: Use VAR_INPUT only for function inputs that are read only inside the function body.
+RULE: Do not assign to VAR_INPUT inside the function body.
+RULE: Do not define timer, retentive timer, long timer, long retentive timer, counter, or long counter types as VAR_INPUT.
+RULE: Use VAR_OUTPUT only for the function return data and additional output values.
+RULE: Do not use VAR_IN_OUT, VAR_PUBLIC, or RETAIN classes inside a function.
+RULE: Do not use VAR_RETAIN in a function POU.
+________________________________________
+4. FUNCTION BLOCK LOCAL LABEL RULES
+RULE: Use VAR in a function block for internal state that is not retained after power off.
+RULE: Use VAR_RETAIN in a function block only for internal state that must be latched across power cycles.
+RULE: Use VAR_INPUT in a function block for input parameters that are read only inside the FB.
+RULE: Use VAR_OUTPUT in a function block for normal outputs that do not need retention.
+RULE: Use VAR_OUTPUT_RETAIN for outputs of a function block that must keep their value when power is lost.
+RULE: Use VAR_IN_OUT for parameters that must be both read and written by the function block caller.
+RULE: Use VAR_PUBLIC for internal FB variables that must be readable from other POUs.
+RULE: Use VAR_PUBLIC_RETAIN only when the public FB variable must be latch type and globally readable.
+________________________________________
+5. DATA TYPE USAGE RULES
+RULE: Use BOOL for on/off status, execution conditions, and EN/ENO signals.
+RULE: Use INT for signed 16 bit integer calculations within −32768 to 32767.
+RULE: Use DINT when integer values may exceed the INT range or require 32 bit precision.
+RULE: Use WORD for 16 bit unsigned data and bit field operations.
+RULE: Use DWORD for 32 bit unsigned data and combined bit fields.
+RULE: Use REAL for arithmetic needing decimals and about seven significant digits.
+RULE: Use LREAL only when extended precision is required and supported by the program design.
+RULE: Use TIME for durations expressed in days, hours, minutes, seconds, and milliseconds.
+RULE: Use TIMER, RETENTIVETIMER, LTIMER, LRETENTIVETIMER, COUNTER, and LCOUNTER only when the timer/counter structure behavior is required.
+RULE: Do not use timer and counter structure types in functions where they are explicitly disallowed.
+RULE: Use STRING for ASCII or Shift JIS text up to the supported length.
+RULE: Use WSTRING for Unicode text when multi language characters are needed.
+RULE: Use arrays when many values of the same data type must be processed with index based logic.
+RULE: Use structures when related values of different data types must be grouped under one logical name.
+RULE: Only assign one array to another array when both arrays have identical element type and element count.
+RULE: Only assign one structure to another when both labels share the same structure type definition.
+________________________________________
+6. VAR CLASS SCOPE RULES
+VAR class in PROGRAM:
+•	VAR is allowed in PROGRAM for local non-retained variables.
+•	VAR_RETAIN is allowed in PROGRAM for local retained variables.
+•	VAR_CONSTANT is allowed in PROGRAM for local read-only constants.
+•	VAR_INPUT is not allowed in PROGRAM.
+•	VAR_OUTPUT is not allowed in PROGRAM.
+•	VAR_OUTPUT_RETAIN is not allowed in PROGRAM.
+•	VAR_IN_OUT is not allowed in PROGRAM.
+•	VAR_PUBLIC is not allowed in PROGRAM.
+•	VAR_PUBLIC_RETAIN is not allowed in PROGRAM.
+VAR class in FUNCTION:
+•	VAR is allowed in FUNCTION for local non-retained variables.
+•	VAR_RETAIN is not allowed in FUNCTION.
+•	VAR_CONSTANT is allowed in FUNCTION for local read-only constants.
+•	VAR_INPUT is allowed in FUNCTION for input parameters.
+•	VAR_OUTPUT is allowed in FUNCTION for output parameters.
+•	VAR_OUTPUT_RETAIN is not allowed in FUNCTION.
+•	VAR_IN_OUT is not allowed in FUNCTION.
+•	VAR_PUBLIC is not allowed in FUNCTION.
+•	VAR_PUBLIC_RETAIN is not allowed in FUNCTION.
+VAR class in FUNCTION_BLOCK:
+•	VAR is allowed in FUNCTION_BLOCK for local non-retained variables.
+•	VAR_RETAIN is allowed in FUNCTION_BLOCK for local retained variables.
+•	VAR_CONSTANT is allowed in FUNCTION_BLOCK for local read-only constants.
+•	VAR_INPUT is allowed in FUNCTION_BLOCK for input parameters.
+•	VAR_OUTPUT is allowed in FUNCTION_BLOCK for output parameters.
+•	VAR_OUTPUT_RETAIN is allowed in FUNCTION_BLOCK for retained output parameters.
+•	VAR_IN_OUT is allowed in FUNCTION_BLOCK for bidirectional parameters.
+•	VAR_PUBLIC is allowed in FUNCTION_BLOCK for external readable variables.
+•	VAR_PUBLIC_RETAIN is allowed in FUNCTION_BLOCK for retained and external readable variables.
+VAR_GLOBAL classes:
+•	VAR_GLOBAL provides project-wide scope for shared data.
+•	VAR_GLOBAL_CONSTANT provides project-wide scope for read-only constants.
+•	VAR_GLOBAL_RETAIN provides project-wide scope for retained data.
+________________________________________
+7. DATA TYPE RETENTION RESTRICTIONS
+Stateless context FUNCTION restrictions:
+•	TIMER type is not allowed in FUNCTION.
+•	RETENTIVETIMER type is not allowed in FUNCTION.
+•	LTIMER type is not allowed in FUNCTION.
+•	LRETENTIVETIMER type is not allowed in FUNCTION.
+•	COUNTER type is not allowed in FUNCTION.
+•	LCOUNTER type is not allowed in FUNCTION.
+•	Any VAR_RETAIN class is not allowed in FUNCTION.
+Stateful context PROGRAM and FUNCTION_BLOCK allowances:
+•	All timer types are allowed in PROGRAM and FUNCTION_BLOCK.
+•	All counter types are allowed in PROGRAM and FUNCTION_BLOCK.
+•	VAR_RETAIN is allowed in PROGRAM and FUNCTION_BLOCK.
+________________________________________
+8. DATA TYPE CHARACTERISTICS
+BOOL data type:
+•	BOOL has size of 1 bit.
+•	BOOL has range of TRUE or FALSE.
+•	BOOL is used for Boolean logic operations.
+INT data type:
+•	INT has size of 16 bit.
+•	INT has range of -32768 to +32767.
+•	INT is used for signed integer calculations.
+DINT data type:
+•	DINT has size of 32 bit.
+•	DINT has range of -2147483648 to +2147483647.
+•	DINT is used for extended signed integer calculations.
+WORD data type:
+•	WORD has size of 16 bit.
+•	WORD has range of 0 to 65535.
+•	WORD is used for unsigned data and bit string operations.
+DWORD data type:
+•	DWORD has size of 32 bit.
+•	DWORD has range of 0 to 4294967295.
+•	DWORD is used for extended unsigned data and bit string operations.
+REAL data type:
+•	REAL has size of 32 bit.
+•	REAL has range of approximately ±1.18×10⁻³⁸ to ±3.40×10³⁸.
+•	REAL is used for single precision floating point arithmetic.
+LREAL data type:
+•	LREAL has size of 64 bit.
+•	LREAL has range of approximately ±2.23×10⁻³⁰⁸ to ±1.80×10³⁰⁸.
+•	LREAL is used for double precision floating point arithmetic.
+TIME data type:
+•	TIME has variable size.
+•	TIME has range from T#0ms to T#49d17h2m47s295ms.
+•	TIME is used for time duration values.
+STRING data type:
+•	STRING has variable size.
+•	STRING supports up to 255 characters.
+•	STRING is used for ASCII and Shift JIS text.
+WSTRING data type:
+•	WSTRING has variable size.
+•	WSTRING supports up to 255 characters.
+•	WSTRING is used for Unicode text.
+ARRAY data type:
+•	ARRAY has variable size.
+•	ARRAY provides indexed collection of elements.
+•	ARRAY is used for homogeneous data sets.
+STRUCT data type:
+•	STRUCT has variable size.
+•	STRUCT provides named members of different types.
+•	STRUCT is used for heterogeneous data groups.
+TIMER data type:
+•	TIMER is a structure type.
+•	TIMER represents a timer instance.
+•	TIMER is used for standard timer operations.
+RETENTIVETIMER data type:
+•	RETENTIVETIMER is a structure type.
+•	RETENTIVETIMER represents a retained timer instance.
+•	RETENTIVETIMER is used for timer operations that persist across power cycles.
+LTIMER data type:
+•	LTIMER is a structure type.
+•	LTIMER represents a long timer instance.
+•	LTIMER is used for extended duration timer operations.
+LRETENTIVETIMER data type:
+•	LRETENTIVETIMER is a structure type.
+•	LRETENTIVETIMER represents a long retained timer instance.
+•	LRETENTIVETIMER is used for extended duration timer operations that persist across power cycles.
+COUNTER data type:
+•	COUNTER is a structure type.
+•	COUNTER represents a counter instance.
+•	COUNTER is used for standard counting operations.
+LCOUNTER data type:
+•	LCOUNTER is a structure type.
+•	LCOUNTER represents a long counter instance.
+•	LCOUNTER is used for extended range counting operations.
+________________________________________
+9. ASSIGNMENT COMPATIBILITY RULES
+Array assignment requirements:
+•	Source array and destination array must have identical element type.
+•	Source array and destination array must have identical element count.
+•	Array bounds must match exactly such as ARRAY[1..10] assigned to ARRAY[1..10].
+•	Partial array assignment is not allowed.
+Structure assignment requirements:
+•	Source structure and destination structure must share the same TYPE definition.
+•	All structure members must have identical types in the same order.
+•	Structure assignment between different TYPE definitions is not allowed

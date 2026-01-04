@@ -1,0 +1,117 @@
+1. ST SYNTAX-SPECIFIC FORBIDDEN CONSTRUCTS
+RULE: Ladder mnemonics (LD, LDI, OUT, AND, ANI, OR, ORI, ORB, ANB, MPS, MRD, MPP) cannot be used in ST programs; all logic must be expressed using assignment operators (:=), Boolean expressions, and control syntax.
+RULE: VAR declarations cannot appear inside the ST program body between BEGIN and END; all variables must be declared in the POU header declaration sections (VAR, VAR_INPUT, VAR_OUTPUT, VAR_IN_OUT, VAR_CONSTANT, VAR_RETAIN) before the program code.
+RULE: RETURN statements cannot be used in main program blocks to end program execution; RETURN is only valid inside functions (FUN) and function blocks (FB) to exit early, whereas main program blocks execute sequentially to the last statement.
+RULE: Semicolons (;) are mandatory to terminate every statement in ST including assignments, function calls, and control syntax; missing semicolons cause compilation errors at the statement location.
+RULE: Control syntax keywords must use proper END_ terminators matching the opening keyword: IF requires END_IF, FOR requires END_FOR, WHILE requires END_WHILE, CASE requires END_CASE, REPEAT requires END_REPEAT; mismatched or missing terminators cause syntax errors.
+RULE: Assignment operator (:=) is mandatory for all variable assignments in ST; the single equals sign (=) is reserved for comparison operations only and cannot be used for assignment.
+________________________________________
+2. ST VARIABLE CLASS RESTRICTIONS
+RULE: VAR_TEMP declarations are not supported in FX5U ST; temporary variables must be declared using VAR class which allocates memory for the entire program execution, not just during function/FB execution.
+RULE: All variables must be declared with explicit data types in ST; implicit typing is not supported and variables without type specification cause compilation errors.
+RULE: Variable declarations in ST must follow the format: variable_name : data_type := initial_value; where the colon separates name from type and := provides optional initialization.
+________________________________________
+3. ST OPERATOR & EXPRESSION RESTRICTIONS
+RULE: Single ST statements are limited to maximum 1024 operators; exceeding this limit causes compilation failure with error indicating statement complexity exceeded.
+RULE: Operator precedence in ST follows strict order: () parentheses (highest priority 1), function calls (priority 2), ** exponentiation (priority 3), - negation and NOT (priority 4), * / MOD multiplication/division/modulo (priority 5), + - addition/subtraction (priority 6), comparison operators < > <= >= (priority 7), = equality and <> inequality (priority 8), & AND logical and (priority 9), XOR exclusive or (priority 10), OR logical or (priority 11 lowest).
+RULE: When expressions include multiple operators with the same priority, operations are performed strictly from left to right; parentheses must be used to override this left-to-right evaluation order.
+RULE: The exponentiation operator (**) requires ANY_REAL data type for the base and ANY_NUM data type for the exponent, producing ANY_REAL result; integer bases are automatically converted to REAL for exponentiation operations.
+RULE: Modulo operator (MOD) requires both operands to be ANY_INT data types; using MOD with REAL or other non-integer types causes data type mismatch compilation error.
+RULE: Comparison operators (<, >, <=, >=, =, <>) accept ANY_ELEMENTARY data types except WSTRING for operands but always produce BOOL type results regardless of input types.
+________________________________________
+4. ST CONTROL SYNTAX RESTRICTIONS
+RULE: EXIT statements can only be used inside iteration loops (FOR, WHILE, REPEAT); using EXIT outside loop constructs or in conditional IF blocks without enclosing loop causes compilation error.
+RULE: FOR loop counter variables must not be modified inside the loop body except by the FOR statement itself; manual assignment to the loop counter like counter := counter + 1; inside FOR loop causes undefined iteration behavior.
+RULE: FOR loop syntax requires TO keyword for endpoint and optional BY keyword for increment; missing TO keyword or using other keywords causes syntax error in loop definition.
+RULE: WHILE loop Boolean condition is evaluated before executing the loop body; if the condition is FALSE initially, the loop body never executes, unlike REPEAT which executes at least once.
+RULE: REPEAT loop Boolean condition is evaluated after executing the loop body; the loop continues while condition is FALSE and exits when TRUE, which is opposite to WHILE loop logic.
+RULE: CASE statement selector must be integer expression or constant label; using REAL, STRING, or BOOL types as CASE selector causes data type error.
+RULE: CASE statement values must be unique within the same CASE construct; duplicate case values cause compilation error indicating ambiguous case match.
+RULE: CASE statement can include integer ranges using two-period notation like 10..20; the range is inclusive of both endpoints and cannot be used with non-integer types.
+RULE: ELSE clause in CASE statement handles all values not explicitly listed in case branches; omitting ELSE means unlisted values perform no action rather than causing error.
+RULE: IF statement Boolean conditions must evaluate to BOOL type; using non-Boolean expressions like integers or reals without comparison operators causes type mismatch error.
+RULE: ELSIF keyword (not ELSEIF or ELSE IF) must be used for additional conditions in IF statements; incorrect spelling or spacing causes syntax error.
+________________________________________
+5. ST FUNCTION/FUNCTION BLOCK CALL RESTRICTIONS
+RULE: Function calls in ST can appear in expressions or as standalone statements; functions with VAR_OUTPUT parameters must be called as statements with semicolon termination like FunctionName(arg1, arg2);
+RULE: Function block calls in ST must use instance name followed by parameter assignments in parentheses like FB_Instance(IN1:=value1, OUT1=>result1); where := assigns inputs and => retrieves outputs.
+RULE: Function block instances cannot be called without being declared first; attempting to call undeclared FB instance causes undefined identifier error.
+RULE: Function block input parameters use := assignment operator; output parameters use => assignment operator; input/output parameters use := operator in ST function block calls.
+RULE: Standard functions with EN/ENO in ST use _E suffix in name like MAX_E, MIN_E, ADD_E; calling these without _E suffix invokes non-EN/ENO version which cannot handle enable logic.
+RULE: Functions without return values and functions with VAR_OUTPUT parameters can be executed as statements by adding semicolon; attempting to use their non-existent return value in expression causes error.
+________________________________________
+6. ST DATA TYPE & CONVERSION RESTRICTIONS
+RULE: Device type specifiers in ST are appended to word devices using colon notation: D0:UD for unsigned DWORD, D0:D for signed DWORD, D0:E for REAL float; omitting specifier defaults to INT type.
+RULE: Automatic type conversion in ST only occurs from smaller to larger data types: INT→DINT, WORD→DWORD, 16-bit→ANY_REAL (converts to single-precision REAL), WORD→ANY32 (converts to DWORD unsigned).
+RULE: Type conversion between signed and unsigned integers of the same bit width requires explicit conversion functions; INT to UINT or vice versa does not auto-convert and causes type mismatch.
+RULE: When assigning arithmetic operation results to larger data types, operands must be explicitly converted first; expression varDint1 := varInt1 * 10; causes overflow if result exceeds INT range because multiplication occurs in INT type before DINT assignment.
+RULE: Negating the minimum value of INT type (-32768) results in the same value -32768 due to two's complement overflow; the expression -(-32768) evaluates to -32768 not +32768 without error indication.
+________________________________________
+7. ST COMMENT SYNTAX RESTRICTIONS
+RULE: Single-line comments in ST use double-slash // prefix; everything after // until line end is treated as comment and does not execute.
+RULE: Multi-line comments in ST use (* comment ) or / comment */ delimiters; these can span multiple lines but cannot be nested with same delimiter type.
+RULE: Comment delimiters must be properly matched; unmatched (* without ) or / without */ causes syntax error at end of program.
+RULE: Comments count toward character limits in inline ST; a 2000-character comment plus 100-character code exceeds 2048-character inline ST limit causing error.
+________________________________________
+8. ST STATEMENT STRUCTURE RESTRICTIONS
+RULE: Assignment statements in ST must have compatible data types on both sides; assigning DINT to INT without conversion causes implicit truncation if value exceeds INT range.
+RULE: When assigning array type labels in ST, the entire array is assigned without element indexing like intAry1 := intAry2; which requires both arrays have identical data type and number of elements.
+RULE: When assigning structure type labels in ST, both sides must have identical structure definitions; assigning structures with different member types or names causes type mismatch error.
+RULE: Bit type labels in conditional statements remain ON once set to TRUE in the conditional block unless explicitly set to FALSE in ELSE clause or subsequent statement; without explicit reset the bit stays ON permanently.
+RULE: Timer and counter function blocks in conditional statements must have proper execution structure; placing TON or CTU call only inside IF without ELSE causes FB to not execute when condition is FALSE, resulting in timer/counter malfunction.
+________________________________________
+9. ST-SPECIFIC INSTRUCTION RESTRICTIONS
+RULE: Rising edge detection in ST must use R_TRIG function block; ladder instructions PLS, PLF, PPLS are not valid ST syntax and cause compilation error if used.
+RULE: Falling edge detection in ST must use F_TRIG function block; attempting to use ladder falling edge instructions causes syntax error.
+RULE: Master control instructions MC and MCR from ladder logic cannot be called in ST; ST programs should use IF-ELSE conditional logic instead of master control paradigm.
+RULE: OUT instruction from ladder logic is not valid in ST; output assignment must use := operator like Y0 := TRUE; instead of OUT(condition, Y0);
+RULE: Special timer instructions like TMRH are ladder-specific and not available in ST; ST must use standard timer function blocks TON, TOF, TP with proper type declarations.
+________________________________________
+10. ST DEVICE ACCESS RESTRICTIONS
+RULE: Step relay (S) and SFC block device (BL) used in ST expressions are not subject to automatic data type conversion; explicit size matching or conversion functions are required to avoid compilation errors.
+RULE: Using step relay (S) on the right side of ST assignment or as function argument may cause conversion error; the value should be transferred to intermediate variable first with proper type conversion.
+RULE: Digit-specified step relay like K4S0 in ST requires explicit data size matching; K4S0 is 16-bit but assigning to DWORD requires conversion to K8S0 or intermediate transfer.
+________________________________________
+11. ST STRING HANDLING RESTRICTIONS
+RULE: String literals in ST use single quotes for ASCII/Shift-JIS strings like 'ABC' and double quotes for Unicode strings like "ABC"; mixing quote types causes syntax error.
+RULE: Dollar sign () in ST string literals must be escaped as $ or represented as hex 24; unescaped $ like 'ABC ' causes compile error at string definition. 
+RULE: STRING type data is limited to maximum 255 characters in ST; attempting to assign or declare strings longer than 255 characters causes compilation error.
+RULE: String conversion functions in ST like STRING_TO_INT require ASCII codes in specific ranges: 30H-39H for digits 0-9, 20H for space, 2DH for minus sign, 00H for null terminator; values outside these ranges cause error code 3401H.
+RULE: STRING_TO_INT in ST accepts values "-32768" to "32767"; STRING_TO_DINT accepts "-2147483648" to "2147483647"; values outside these ranges cause conversion error 3401H.
+________________________________________
+12. ST LABEL & DEVICE NAMING RESTRICTIONS
+RULE: Labels whose names end with underscore (_) cannot be used as array indices in ST; to use such labels as index, assign to another variable first then use that variable as index.
+RULE: Structure members of labels whose names end with underscore () cannot be accessed using dot notation in ST; attempting structVar.member causes syntax error.
+RULE: Array indices cannot be specified for labels whose names end with underscore (); attempting labelAry[5] in ST causes compilation error.
+________________________________________
+13. ST INLINE ST BOX RESTRICTIONS
+RULE: Inline ST boxes in ST editor are limited to 20,000 characters in GX Works3 version 1.065T or later; exceeding this length causes compilation or editing errors.
+RULE: Inline ST boxes in versions before 1.065T are limited to 2048 characters; programs exceeding this cannot be edited in older versions even if created in newer versions.
+RULE: RETURN syntax used in inline ST box ends processing inside the inline ST unit only; it does not end the enclosing program block execution which continues to next statement.
+RULE: Inline ST elements in FBD/LD programs cannot contain module function block calls; attempting to call module FB in inline ST causes execution error.
+RULE: Maximum 64 inline ST elements can be inserted into a single POU; exceeding this limit causes program structure error.
+RULE: When RETURN is used in inline ST within ladder or FBD/LD, only the inline ST execution stops; the main program continues execution unlike RETURN in standalone ST program.
+________________________________________
+14. ST TRANSITION PROGRAM RESTRICTIONS (SFC)
+RULE: ST transition programs in SFC must use TRAN function call or TRAN assignment to create transition condition; TRAN(bLabel1 & bLabel2); makes transition TRUE when Boolean expression is TRUE.
+RULE: ST transition programs can assign Boolean expression to reserved word TRAN like TRAN := bLabel1 & bLabel2; or to transition name like Transition1 := bLabel1 & bLabel2;
+RULE: ST transition programs in SFC cannot use coil, function block calls (except specific ones), jump, jump label, or return elements; only Boolean logic and TRAN are permitted.
+________________________________________
+15. ST ARRAY ACCESS RESTRICTIONS
+RULE: BOOL type arrays in ST do not support bit specification syntax; attempting boolArray[5].3 causes compile error whereas word devices like D0.3 support bit specification.
+RULE: When array index in ST uses device register like array[i:=D0], the operation is not atomic; interrupt during execution can cause data corruption requiring DI/EI instructions to disable/enable interrupts.
+RULE: Array index expressions in ST can use variables, device registers, or expressions; the index is evaluated at runtime but bounds checking is not automatic requiring manual validation.
+________________________________________
+16. ST POINTER RESTRICTIONS
+RULE: Pointer arithmetic operations are not supported in FX5U ST; expressions like ptr := ptr + 4; or ptr := ptr - offset; cause compilation errors.
+RULE: Pointers in ST can only be used for indirect addressing; mathematical operations, comparisons other than equality, or pointer-to-pointer assignments are not supported.
+RULE: Pointer type labels cannot be used in inline ST programs; attempting to declare or use pointer type in inline ST causes restriction error.
+________________________________________
+17. ST PROGRAM EXECUTION RESTRICTIONS
+RULE: ST statements execute sequentially from top to bottom; there is no concept of ladder scan or rung evaluation, just line-by-line execution like procedural programming.
+RULE: Multiple worksheets in ST POU execute in order specified by worksheet execution order setting; default order is ascending by worksheet name if no explicit order set.
+RULE: ST programs in event execution type or interrupt execution type follow same syntax rules as scan execution but have additional restrictions on callable instructions and function blocks.
+
+
+
+

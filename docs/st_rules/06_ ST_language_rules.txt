@@ -1,0 +1,41 @@
+1. ST STATEMENT SYNTAX RULES (3 Rules)
+RULE: Every statement in ST must end with a semicolon (;).
+RULE: Spaces, tabs, and line feeds can be inserted anywhere between operators and data in ST programs.
+RULE: A maximum of 1024 operators can be used in one ST statement.
+________________________________________
+2. ST ASSIGNMENT STATEMENT RULES (6 Rules)
+RULE: In ST assignment statements, the left side must be a variable and cannot be a constant or expression.
+RULE: In ST, timer structure contact members (.S) cannot be on the left side of assignment statements.
+RULE: In ST, timer structure coil members (.C) cannot be on the left side of assignment statements.
+RULE: In ST, counter structure contact members (.S) cannot be on the left side of assignment statements.
+RULE: In ST, counter structure coil members (.C) cannot be on the left side of assignment statements.
+RULE: In ST, function block instances cannot be directly assigned; use instance_name.input_variable or instance_name.output_variable syntax instead.
+________________________________________
+3. ST OPERATOR AND EXPRESSION RULES (3 Rules)
+RULE: In ST expressions, if multiple operators with the same priority exist, the operation is performed from the leftmost operator.
+RULE: In ST, operator precedence follows standard mathematical order unless overridden by parentheses.
+RULE: In ST, up to 1024 operators can be used in a single statement.
+________________________________________
+4. ST CONTROL STRUCTURE RULES (2 Rules)
+RULE: ST FOR loops must specify TO clause with valid end value.
+RULE: ST FOR loops with BY clause set to 0 create infinite loops and must be avoided.
+________________________________________
+5. ST FUNCTION CALLING RULES (3 Rules)
+RULE: In ST, functions can be called as expressions or as statements depending on whether return value is used.
+RULE: In ST, user-defined functions without return values must be called as statements with semicolon terminator.
+RULE: In ST, function block instances require explicit input and output assignment using := for inputs and => for outputs.
+________________________________________
+6. ST ARRAY INDEX SYNTAX RULES (2 Rules)
+RULE: In ST, array indices can be specified using expressions such as array_name[5+4].
+RULE: In ST, multi-dimensional array indices are delimited by commas: array_name[index1, index2, index3].
+________________________________________
+7. ST TYPE CONVERSION SYNTAX RULES (2 Rules)
+RULE: In ST, explicit type conversion uses function call syntax such as BOOL_TO_INT(bLabel1).
+RULE: In ST, automatic type conversion occurs from smaller to larger data types in assignment statements and arithmetic operations.
+________________________________________
+8. ST RETURN STATEMENT RULES (2 Rules)
+RULE: The ST RETURN statement is used to end a program, function block, or function in the middle of processing.
+RULE: When RETURN is used in an ST program, processing jumps to the next step after the last line of the program.
+________________________________________
+9. ST INLINE STRUCTURED TEXT RULES (1 Rule)
+RULE: When inline ST is embedded in ladder programs, maximum 2048 characters can be input with newline characters counted as two characters.

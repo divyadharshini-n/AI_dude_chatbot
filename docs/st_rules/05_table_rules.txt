@@ -1,0 +1,135 @@
+1. GLOBAL LABEL TABLE FORMAT RULES (3 Rules)
+RULE: Global Label Table columns must appear in the following order: Label Name, Data Type, ARRAY checkbox with Element dimensions, Class, Device Assignment, Initial Value, Constant, Comment.
+RULE: Global Label Table uses the same column structure across all label editor types in GX Works3.
+RULE: Global Label Table data can be exported to CSV or XML format and imported from CSV format.
+________________________________________
+2. GLOBAL LABEL SCOPE AND ACCESS RULES (4 Rules)
+RULE: Global labels are accessible from all Programs, Functions, and Function Blocks in the project.
+RULE: Global labels defined with VAR_GLOBAL class can be used in all POUs without additional declaration.
+RULE: Global labels mapped to latched devices must use VAR_GLOBAL_RETAIN class.
+RULE: Global constants must use VAR_GLOBAL_CONSTANT class and cannot be modified in any ST body.
+________________________________________
+3. PROGRAM LOCAL LABEL TABLE FORMAT RULES (2 Rules)
+RULE: Program Local Label Table uses the same column structure as the Global Label Table.
+RULE: Program Local Label Table supports the same data export and import operations as Global Label Table.
+________________________________________
+4. PROGRAM LOCAL LABEL SCOPE RULES (3 Rules)
+RULE: Program local labels are visible only within the owning Program POU.
+RULE: Program local labels cannot be accessed from other Programs, Functions, or Function Blocks.
+RULE: Program local constants declared with VAR_CONSTANT must not be modified in the ST body.
+________________________________________
+5. FUNCTION LOCAL LABEL TABLE FORMAT RULES (2 Rules)
+RULE: Function Local Label Table uses the same column structure as the Global Label Table.
+RULE: Function Local Label Table supports columns for VAR_INPUT, VAR_OUTPUT, VAR, and VAR_CONSTANT classes only.
+________________________________________
+6. FUNCTION LOCAL LABEL CLASS RULES (5 Rules)
+RULE: Function local labels support only the following classes: VAR_INPUT, VAR_OUTPUT, VAR, VAR_CONSTANT.
+RULE: Function input labels declared with VAR_INPUT must not be written or assigned inside the function body.
+RULE: Function local labels declared with VAR are temporary scratch variables that exist only during function execution.
+RULE: Function local labels declared with VAR_CONSTANT are compile-time constants that cannot be modified.
+RULE: Functions do not support VAR_RETAIN, VAR_IN_OUT, VAR_PUBLIC, or any RETAIN class.
+________________________________________
+7. FUNCTION BLOCK LOCAL LABEL TABLE FORMAT RULES (2 Rules)
+RULE: Function Block Local Label Table uses the same column structure as the Global Label Table.
+RULE: Function Block Local Label Table supports all label classes including VAR, VAR_INPUT, VAR_OUTPUT, VAR_RETAIN, VAR_IN_OUT, VAR_PUBLIC, VAR_PUBLIC_RETAIN, VAR_OUTPUT_RETAIN, and VAR_CONSTANT.
+________________________________________
+8. FUNCTION BLOCK LOCAL LABEL SCOPE RULES (4 Rules)
+RULE: Each Function Block instance maintains its own separate internal state for all local labels.
+RULE: Function Block local labels declared with VAR_RETAIN preserve their values across power cycles when backup is available.
+RULE: Function Block input labels declared with VAR_INPUT receive values from the caller and are read-only inside the FB body.
+RULE: Function Block labels declared with VAR_PUBLIC can be read from other POUs using instance_name.label_name syntax.
+________________________________________
+9. STRUCTURE DEFINITION RULES (6 Rules)
+RULE: Structure definitions define named members with explicit data types and optional initial values.
+RULE: Structure definitions must be declared separately in the structure editor and not inline inside ST body.
+RULE: Structures may contain members of elementary data types, arrays, pointer types, and other structures.
+RULE: Structure member data types can be different from each other within the same structure.
+RULE: Predefined structure types include TIMER, RETENTIVETIMER, LTIMER, LRETENTIVETIMER, COUNTER, and LCOUNTER.
+RULE: Predefined timer and counter structure types contain three members: S (contact), C (coil), and N (current value).
+________________________________________
+10. STRUCTURE USAGE RULES (5 Rules)
+RULE: Labels may use structure types as their data type in the Data Type column.
+RULE: Structure-type labels follow the same class and retention rules as other labels based on their declared class.
+RULE: Structure members are accessed using dot notation: structure_label_name.member_name.
+RULE: Entire structures may be assigned to each other only when both structures share the same structure type definition.
+RULE: Partial structure assignment is not allowed; all members must be assigned together or accessed individually.
+________________________________________
+11. STRUCTURE ARRAY RULES (3 Rules)
+RULE: Structures can be declared as arrays by selecting the ARRAY checkbox for a structure-type label.
+RULE: Structure array elements are accessed using the format: structure_label_name[index].member_name.
+RULE: Structure arrays follow the same indexing rules as elementary type arrays regarding index range and bounds checking.
+________________________________________
+12. ARRAY DEFINITION RULES (7 Rules)
+RULE: Arrays must specify base data type, dimensions (1 to 3), index range, and optional initial value.
+RULE: Array index range is specified using the format: ARRAY[start_value..end_value] where start_value and end_value define the valid index range.
+RULE: Array start_value can be negative, zero, or positive allowing offset-based indexing.
+RULE: Array indices must remain within the defined range during program execution.
+RULE: Loop variables and index expressions must not exceed array bounds.
+RULE: Maximum array elements depend on data type: 32768 for most types, less for STRING and WSTRING.
+RULE: Different initial values cannot be set for individual array elements; all elements share the same initial value.
+________________________________________
+13. ARRAY USAGE RULES (4 Rules)
+RULE: Array elements are accessed using square bracket notation: array_name[index] for one-dimensional arrays.
+RULE: Multi-dimensional array elements are accessed using comma-separated indices: array_name[index1, index2, index3].
+RULE: Array indices can be constants, devices, labels, or expressions depending on the programming language.
+RULE: In ladder diagrams, array element numbers can be omitted and will default to the starting index value.
+________________________________________
+14. DEVICE MAPPING RULES (6 Rules)
+RULE: Labels may be mapped to devices using the Device Assignment field in the label table.
+RULE: Label data type must match the assigned device size and type for valid device mapping.
+RULE: Bit-type labels can be assigned to bit devices (X, Y, M, L, S, B, SM).
+RULE: Word-type labels can be assigned to word devices (D, W, R, SD, ZR, Z).
+RULE: Special devices such as SD and SM must be used only as specified in system manuals and not for general-purpose storage.
+RULE: When a device is assigned to a global label, the initial value field is ignored and the device value is used instead.
+________________________________________
+15. DEVICE MAPPING ADVANCED RULES (4 Rules)
+RULE: Labels can be assigned to digit-specified bit devices using format K4M0 for BCD digit specification.
+RULE: Labels can be assigned to bit-specified word devices using format D0.1 for individual bit access.
+RULE: Labels can be assigned to module labels for intelligent function module access.
+RULE: Device names with type specifiers (such as D0:U) cannot be used in device assignment.
+________________________________________
+16. GLOBAL CONSTANT RULES (3 Rules)
+RULE: Global constants must use VAR_GLOBAL_CONSTANT class exclusively.
+RULE: Constant labels must not be modified in any Structured Text body or program.
+RULE: The Constant field in the label table is only available when the class is VAR_GLOBAL_CONSTANT or VAR_CONSTANT.
+________________________________________
+17. INITIAL VALUE RULES (5 Rules)
+RULE: Initial values of labels are applied when the CPU module transitions from STOP to RUN.
+RULE: Initial values cannot be set for safety global labels, local labels in safety programs, or standard/safety shared labels.
+RULE: Global labels with assigned devices do not use the initial label value; the device value is used instead.
+RULE: Different initial values cannot be set for individual array elements; use program logic to initialize array elements individually.
+RULE: Initial values remain effective until modified by program execution.
+________________________________________
+18. MODULE LABEL RULES (3 Rules)
+RULE: Module-specific devices must be accessed through labels defined in the label table.
+RULE: Module label usage must follow the corresponding intelligent function module manual or system manual.
+RULE: Module labels must not be repurposed as general-purpose logic flags or application variables.
+________________________________________
+19. LABEL NAMING RULES (5 Rules)
+RULE: Label names must not start with a numeric digit but may contain digits after the first character.
+RULE: Label names must not include spaces or whitespace characters.
+RULE: Label names must not use reserved words defined by IEC 61131-3 or GX Works3.
+RULE: Label names must not duplicate device names to avoid naming conflicts.
+RULE: Label names must use characters from the Unicode Basic Multilingual Plane only.
+________________________________________
+20. ALIAS RULES (5 Rules)
+RULE: An alias is created by entering an existing label name in the Device Assignment field of a new label.
+RULE: The alias inherits the data type, class, initial value, and constant properties from the alias source label.
+RULE: An alias can only reference a label in the same category: standard aliases reference standard labels, safety aliases reference safety labels.
+RULE: Circular references must be avoided when creating aliases; an alias chain must not reference back to itself.
+RULE: Aliases must not reference function block instances, structure members, or labels within function blocks.
+________________________________________
+21. LABEL MEMORY ASSIGNMENT RULES (4 Rules)
+RULE: When no device is assigned to a label, the label is automatically assigned to label memory.
+RULE: Label memory assignment follows packing block rules that group labels by data type for efficient memory usage.
+RULE: Packing blocks are assigned in ascending order to minimize unused memory space with padding inserted for address alignment.
+RULE: Assignment order within packing blocks follows: Bit, Word, String, String[Unicode], Double Word, Time, FLOAT[Single], Timer, Retentive Timer, Counter, FLOAT[Double], Long Timer, Long Retentive Timer, Long Counter, Array, Structure/FB instance.
+________________________________________
+22. LABEL COMMENT RULES (3 Rules)
+RULE: Label comments can be entered in the Comment column to document the purpose of each label.
+RULE: Line feeds can be inserted in label comments by pressing Shift+Enter and are counted as two characters.
+RULE: Label comments for array elements and bit-specified labels can be set using the Label Comment window.
+________________________________________
+23. LABEL SYNCHRONIZATION RULES (2 Rules)
+RULE: When a label name is changed in a label editor, the label name is automatically replaced in all program editors if automatic synchronization is enabled.
+RULE: Programs using renamed labels will enter the unconverted state and require recompilation after label name changes.

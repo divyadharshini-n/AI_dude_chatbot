@@ -1,0 +1,32 @@
+
+ 1. EN/ENO RULES (6 Rules)
+RULE: Attach EN and ENO only to functions and function blocks that are configured with EN/ENO support.
+RULE: Always connect a boolean actual argument to EN when calling a function or function block that has EN/ENO.
+RULE: Execute a function or function block body only when EN is TRUE.
+RULE: Set ENO TRUE only when the function or function block has executed normally.
+RULE: Set ENO FALSE when EN is FALSE or when execution inside the function or function block fails.
+RULE: Do not read ENO of a function or function block that has not been configured with EN/ENO.
+________________________________________
+2. FUNCTION BLOCK TYPE RULES (5 Rules)
+RULE: Use a macro-type function block when program size is acceptable and maximum execution speed is required.
+RULE: Use a subroutine-type function block when reducing total program size is more important than execution speed.
+RULE: Do not use macro-type function blocks for module FBs, standard functions, or standard function blocks.
+RULE: Treat a macro-type function block call as inlined code that is loaded into each call location at compile time.
+RULE: Treat a subroutine-type function block call as a runtime call that passes arguments and jumps to a single stored body.
+________________________________________
+3. EN CONTROL METHOD RULES IN FBs (3 Rules)
+RULE: Select "Use MC/MCR to control EN" when edge-sensitive instructions (rising/falling-edge) are used inside the FB.
+RULE: Select "Use CJ to control EN" when simple conditional execution without master control behavior is sufficient.
+RULE: Expect timer, counter, and OUT instruction behavior inside the FB to change depending on the chosen EN control method.
+________________________________________
+4. CALL AND STEP-COUNT RULES (4 Rules)
+RULE: Include extra steps for passing arguments when calling subroutine-type function blocks.
+RULE: Include extra steps for EN and ENO processing when EN/ENO is enabled on a function block.
+RULE: Use LD+MOV, LD+DMOV, LD+EMOV, LD+BMOV and related combinations to pass arguments based on argument class and data type.
+RULE: Do not ignore the additional cycle time impact when many subroutine-type function blocks are nested.
+________________________________________
+5. NESTING AND USAGE RULES (4 Rules)
+RULE: Limit total nesting depth to a maximum of 32 nested levels in total for all subroutine-type function blocks, macro-type function blocks, and functions combined.
+RULE: Do not call module function blocks inside interrupt programs or event execution type programs.
+RULE: Do not call module function blocks between FOR and NEXT, inside inline ST, or inside IF, FOR, or CASE control expressions.
+RULE: Do not block or bypass calls to module function blocks using CJ or master control sections.

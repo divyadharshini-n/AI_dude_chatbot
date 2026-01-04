@@ -1,0 +1,16 @@
+1. ST STATEMENT EXECUTION ORDER RULES (7 Rules)
+RULE: In ST assignment statements, the right side is evaluated completely before assignment to the left side occurs.
+RULE: In ST IF statements, only the first TRUE branch is executed; remaining ELSIF and ELSE branches are skipped.
+RULE: In ST CASE statements, only the first matching case branch is executed; remaining cases are not evaluated.
+RULE: In ST FOR loops, the loop counter is incremented AFTER the loop body executes, not before.
+RULE: In ST WHILE loops, the condition is evaluated BEFORE the loop body executes.
+RULE: In ST REPEAT loops, the condition is evaluated AFTER the loop body executes, ensuring at least one execution.
+RULE: In ST loops, the EXIT statement causes immediate termination of the loop and jumps to the statement following the loop end.
+________________________________________
+2. ST RETURN STATEMENT EXECUTION RULES (3 Rules)
+RULE: In ST programs, the RETURN statement ends execution and jumps to the next step after the last line of the program.
+RULE: In ST function blocks, the RETURN statement ends execution and returns control to the calling POU.
+RULE: In ST functions, the RETURN statement ends execution and returns the function value to the calling expression.
+________________________________________
+3. ST INLINE STRUCTURED TEXT EXECUTION RULES (1 Rule)
+RULE: When RETURN is used in inline ST embedded in ladder programs, it ends only the inline ST block execution and does not terminate the parent program block or POU.

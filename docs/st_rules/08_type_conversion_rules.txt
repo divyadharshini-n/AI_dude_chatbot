@@ -1,0 +1,13 @@
+1. ST EXPLICIT TYPE CONVERSION SYNTAX RULES (4 Rules)
+RULE: In ST, explicit type conversion uses function call syntax: target_variable := TYPE1_TO_TYPE2(source_variable).
+RULE: In ST, timer current value must be explicitly converted using WORD_TO_INT function: varInt := WORD_TO_INT(TN0).
+RULE: In ST, counter current value must be explicitly converted using WORD_TO_INT function: varInt := WORD_TO_INT(CN0).
+RULE: In ST, long counter current value must be explicitly converted using DWORD_TO_DINT function: varDint := DWORD_TO_DINT(LCN0).
+________________________________________
+2. ST ASSIGNMENT CONVERSION WARNING RULES (2 Rules)
+RULE: In ST assignment statements, when assigning INT arithmetic result to DINT variable, convert operands to DINT before operation to avoid overflow: varDint := INT_TO_DINT(varInt) * K40000.
+RULE: In ST, when assigning expression result to larger data type, convert operands first rather than relying on automatic post-operation conversion.
+________________________________________
+3. ST ARITHMETIC OPERATION TYPE PROMOTION RULES (2 Rules)
+RULE: In ST arithmetic expressions with mixed types, operands are automatically promoted to the largest type before operation: INT + REAL results in REAL.
+RULE: In ST, arithmetic operation result type matches the operand types after automatic promotion, not the assignment target type.

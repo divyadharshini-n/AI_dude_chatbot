@@ -1,0 +1,87 @@
+1. PROGRAM STRUCTURE ERROR PREVENTION RULES (8 Rules)
+RULE: Ensure NEXT instruction executes before END, FEND, or STOP when using FOR loops to prevent error 3340H.
+RULE: Place RET instruction before END, FEND, or STOP in subroutines to prevent error 3381H.
+RULE: Do not place END or FEND instructions between FOR and NEXT instructions to prevent error 33E3H.
+RULE: Do not place END or FEND instructions between MC and MCR instructions to prevent error 33E4H.
+RULE: Do not place END or FEND instructions between STL and RETSTL instructions to prevent error 33E5H.
+RULE: Do not place END or FEND instructions between interrupt pointer (I) and IRET instructions to prevent error 33E7H.
+RULE: Do not use FEND instruction in standby programs or function block files to prevent error 3100H.
+RULE: Only one FEND instruction is allowed per program file; multiple FEND instructions cause errors.
+
+2. INTERRUPT EXECUTION RESTRICTION RULES (3 Rules)
+RULE: Do not execute file operation instructions (FREAD, FWRITE, etc.) in interrupt programs to prevent error 3582H.
+RULE: Do not execute Ethernet communication instructions in interrupt programs to prevent error 3582H.
+RULE: Do not execute positioning instructions requiring Flash ROM access in priority-1 interrupts to prevent error 3580H.
+
+3. ARITHMETIC OPERATION ERROR PREVENTION RULES (5 Rules)
+RULE: Validate divisor values are non-zero before division operations to prevent error 3400H.
+RULE: Validate REAL input values are within valid IEEE-754 range and not NaN, infinity, or denormalized to prevent error 3402H.
+RULE: Scale arithmetic operation inputs or use larger data types when results may exceed numeric range limits to prevent error 3403H.
+RULE: Verify digit and decimal specifications are valid before string conversion operations to prevent error 3401H.
+RULE: Ensure exponentiation base and exponent values produce results within allowable magnitude to prevent error 3403H.
+
+4. DEVICE MEMORY ERROR PREVENTION RULES (4 Rules)
+RULE: Ensure allocated device range is sufficient for operation results to prevent error 2820H.
+RULE: Ensure character string operations have sufficient device memory to store result strings to prevent error 3406H.
+RULE: Ensure string operations include NULL terminator (00H) within device range to prevent error 2820H.
+RULE: Use only supported device types (word, double-word) for arithmetic and data operations to prevent error 2822H.
+
+5. SD CARD FILE OPERATION ERROR PREVENTION RULES (10 Rules)
+RULE: Ensure SD memory card is inserted and mounted before file operations to prevent error 8000H.
+RULE: Turn OFF SM606 (memory card disable request) before executing file operations to prevent error 8000H.
+RULE: Disable write protection on SD card before write operations to prevent error 8001H.
+RULE: Ensure sufficient free space on SD card before write operations to prevent error 8001H.
+RULE: Delete folder contents before deleting the folder itself to prevent error 8004H.
+RULE: Keep file and folder path names within SD file system length limits to prevent error 8006H.
+RULE: Do not access system folder (MELPRJMELPRJ
+MELPRJ) with file operation instructions to prevent error 3405H.
+
+RULE: Specify valid drive number (K2 for SD card) in file operation instructions to prevent error 3405H.
+RULE: Ensure file names are specified and valid before executing file operation instructions to prevent error 3426H.
+RULE: Do not execute file operation instructions (FREAD, FWRITE, etc.) simultaneously with other file operations to prevent conflicts.
+
+6. FTP OPERATION ERROR PREVENTION RULES (4 Rules)
+RULE: Verify FTP file path and name are within character limits and use valid delimiters to prevent error 3405H.
+RULE: Verify FTP connection, credentials, and file permissions before transfer operations to prevent error 8001H.
+RULE: Ensure file names are specified in FTP instruction parameters before execution to prevent error 3426H.
+RULE: Monitor FTP connection stability during transfer to prevent connection loss errors.
+
+7. ETHERNET COMMUNICATION ERROR PREVENTION RULES (5 Rules)
+RULE: Ensure connection numbers are within valid range for socket operations to prevent error 3405H.
+RULE: Ensure receive buffer device range is sufficient for incoming data to prevent error 2820H.
+RULE: Use supported device types for communication buffers to prevent error 2822H.
+RULE: Do not execute Ethernet instructions in interrupt programs to prevent error 3582H.
+RULE: Verify SLMP request length and channel settings are within allowed limits to prevent error 3405H.
+
+8. POSITIONING MODULE ERROR PREVENTION RULES (6 Rules)
+RULE: Minimize Flash ROM write frequency to positioning modules to prevent error 1080H (write count exceeded).
+RULE: Ensure power stability during Flash ROM write operations to prevent error 1931H.
+RULE: Set teaching data selection parameter to 0 (positioning) or 1 (arc) only to prevent error 1863H.
+RULE: Set positioning data number within valid range (1 to 600) to prevent error 1864H.
+RULE: Wait for axis BUSY signal to turn OFF before executing teaching instructions to prevent warning 0903H.
+RULE: Verify axis parameters and control data are within allowed ranges to prevent error 3405H.
+
+9. DATA CONVERSION ERROR PREVENTION RULES (3 Rules)
+RULE: Ensure total digits and decimal digit configuration follows manual constraints for conversion operations to prevent error 3401H.
+RULE: Increase device allocation or reduce output string length when converting to character strings to prevent error 3406H.
+RULE: Verify parameter values are within allowed range and format for conversion operations to prevent error 3405H.
+
+10. FLASH ROM OPERATION RULES (3 Rules)
+RULE: Reset CPU module or power cycle after correcting logic that caused Flash ROM write errors.
+RULE: Avoid power interruption during Flash ROM write operations to prevent data corruption.
+RULE: Check Flash ROM integrity and reset module if Flash ROM write failure occurs (error 1931H).
+
+11. PARAMETER VALIDATION RULES (4 Rules)
+RULE: Validate all instruction parameters are within documented allowed ranges before execution to prevent error 3405H.
+RULE: Verify device type compatibility with instruction requirements to prevent error 2822H.
+RULE: Ensure string length specifications do not exceed device memory allocation to prevent error 3406H.
+RULE: Validate control data structure sizes match instruction requirements to prevent error 2820H.
+
+12. CONCURRENT OPERATION RESTRICTION RULES (3 Rules)
+RULE: Do not execute multiple file operation instructions simultaneously to prevent file access conflicts.
+RULE: Check SM753 (file being accessed) is OFF before executing file operation instructions.
+RULE: Do not execute DEVST, FTPPUT, or FTPGET instructions simultaneously with FREAD or FWRITE instructions.
+
+13. INSTRUCTION PLACEMENT RESTRICTION RULES (2 Rules)
+RULE: Execute priority-sensitive instructions in cyclic scan or lower-priority interrupts, not priority-1 interrupts, to prevent error 3580H.
+RULE: Move interrupt-unsafe instructions to cyclic scan or main routine to prevent error 3582H.

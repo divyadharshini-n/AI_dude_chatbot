@@ -1,0 +1,115 @@
+1. ST SYNTAX & STATEMENT RULES
+RULE: Terminate every ST statement with semicolon (;); missing semicolons cause compilation errors at the statement location where the terminator is expected.
+RULE: Use assignment operator (:=) for variable assignments in ST; single equals sign (=) is reserved exclusively for comparison operations and cannot be used for assignment.
+RULE: Write all ST statements using half-width characters only; full-width characters cause syntax errors in operators, delimiters, and reserved words.
+RULE: Keep individual ST statements under 2048 characters maximum; exceeding this limit requires splitting expressions across multiple lines using intermediate variables.
+RULE: Limit operators to maximum 1024 per statement; complex expressions exceeding this limit must be broken into multiple assignment statements.
+________________________________________
+2. ST CONTROL SYNTAX RULES
+RULE: Match control syntax keywords with proper END_ terminators: IF requires END_IF, FOR requires END_FOR, WHILE requires END_WHILE, CASE requires END_CASE, REPEAT requires END_REPEAT.
+RULE: Use ELSIF keyword (not ELSEIF or ELSE IF) for additional conditions in IF statements; incorrect spelling or spacing causes syntax errors in conditional logic.
+RULE: Place EXIT statements only inside iteration loops (FOR, WHILE, REPEAT); using EXIT outside loop constructs or in conditional IF blocks without enclosing loop causes compilation error.
+RULE: Never modify FOR loop counter variable inside loop body; manual assignment to counter like counter := counter + 1 inside FOR loop causes undefined iteration behavior.
+RULE: Use CASE statements with integer selector expressions or constants only; REAL, STRING, or BOOL types as CASE selector cause data type compilation errors.
+RULE: Ensure CASE statement values are unique within same construct; duplicate case values cause compilation error indicating ambiguous case match conditions.
+RULE: Use two-period notation (..) for integer ranges in CASE statements like 10..20; range is inclusive of both endpoints and cannot be used with non-integer types.
+RULE: Include ELSE clause in CASE statements to handle unmatched values; omitting ELSE means unlisted values perform no action which can cause silent logic failures.
+RULE: Evaluate WHILE loop Boolean condition before executing loop body; if condition is FALSE initially loop body never executes unlike REPEAT which executes at least once.
+RULE: Evaluate REPEAT loop Boolean condition after executing loop body; loop continues while condition is FALSE and exits when TRUE opposite to WHILE loop logic.
+RULE: Specify FOR loop endpoint using TO keyword and optional increment using BY keyword; missing TO or using other keywords causes syntax error in loop definition.
+RULE: Ensure all loops have guaranteed termination conditions; FOR needs valid TO limits, WHILE needs counters eventually falsifying condition, REPEAT needs bounded checks to prevent watchdog errors.
+________________________________________
+3. ST OPERATOR RULES
+RULE: Follow strict operator precedence: () parentheses priority 1, function calls priority 2, ** exponentiation priority 3, - negation/NOT priority 4, */MOD priority 5, +- priority 6, comparison priority 7, = priority 8, AND/& priority 9, XOR priority 10, OR priority 11.
+RULE: When expressions contain multiple operators with same priority, operations execute strictly left to right; use parentheses to override this left-to-right evaluation order.
+RULE: Use exponentiation operator (**) with ANY_REAL base and ANY_NUM exponent producing ANY_REAL result; integer bases automatically convert to REAL for exponentiation operations.
+RULE: Use MOD operator only with ANY_INT data types for both operands; applying MOD to REAL or non-integer types causes data type mismatch compilation error.
+RULE: Use comparison operators (<, >, <=, >=, =, <>) with ANY_ELEMENTARY data types except WSTRING; these operators always produce BOOL type results regardless of input types.
+RULE: Use parentheses explicitly to control operator precedence rather than relying on default precedence; write (a + b) * c instead of a + b * c for clarity.
+________________________________________
+4. ST ASSIGNMENT RULES
+RULE: Match data types exactly in assignments or use explicit conversion functions; assigning DINT to INT without conversion causes implicit truncation if value exceeds INT range.
+RULE: When assigning array type labels assign entire array without element indexing like intAry1 := intAry2; which requires identical data type and number of elements.
+RULE: When assigning structure type labels both sides must have identical structure definitions; assigning structures with different member types or names causes type mismatch error.
+RULE: Pre-convert operands to target data type before arithmetic when assigning to larger types; varDint := INT_TO_DINT(varInt1) * INT_TO_DINT(varInt2) prevents INT overflow before DINT assignment.
+________________________________________
+5. ST TYPE CONVERSION RULES
+RULE: Use device type specifiers in ST with colon notation: D0:UD for unsigned DWORD, D0:D for signed DWORD, D0:E for REAL float; omitting specifier defaults to INT type.
+RULE: Automatic type conversion in ST only occurs from smaller to larger data types: INT→DINT, WORD→DWORD, 16-bit→REAL, WORD→DWORD unsigned conversions allowed.
+RULE: Use explicit conversion functions for signed/unsigned integers of same bit width; INT to UINT or vice versa does not auto-convert and causes type mismatch requiring INT_TO_UINT.
+RULE: Avoid negation operator on INT minimum value (-32768); operation -(-32768) returns -32768 not +32768 due to two's complement overflow without error indication.
+RULE: Perform explicit type conversion before negation when auto-conversion applies; varDint := INT_TO_DINT(varInt); varDint := -varDint prevents INT overflow before DINT conversion.
+RULE: Replace sign inversion with subtraction for potentially minimum values; use result := 0 - value instead of result := -value to avoid INT minimum overflow issues.
+________________________________________
+6. ST FUNCTION/FUNCTION BLOCK CALL RULES
+RULE: Call function blocks in ST using instance name followed by parameter assignments in parentheses: FB_Instance(IN1:=value1, OUT1=>result1) where := assigns inputs and => retrieves outputs.
+RULE: Use := assignment operator for function block input parameters; use => assignment operator for output parameters; use := for input/output parameters in ST FB calls.
+RULE: Call standard functions with EN/ENO using _E suffix in name like MAX_E, MIN_E, ADD_E; calling without _E suffix invokes non-EN/ENO version without enable logic.
+RULE: Execute functions without return values and functions with VAR_OUTPUT parameters as statements with semicolon; attempting to use non-existent return value in expression causes error.
+RULE: Pass function block arguments by name using IN1:=value syntax for clarity; named parameters self-document and prevent errors when argument order changes in FB definition.
+RULE: Check function block ENO output explicitly after calls; use IF FB1.ENO THEN ... ELSE ErrorHandler(); END_IF; pattern to catch execution errors rather than assuming success.
+________________________________________
+7. ST COMMENT RULES
+RULE: Use single-line comments with // prefix; everything after // until line end treated as comment and does not execute in ST program.
+RULE: Use multi-line comments with (* comment ) or / comment */ delimiters; these span multiple lines but cannot be nested with same delimiter type.
+RULE: Match comment delimiters properly; unmatched (* without ) or / without */ causes syntax error at end of ST program.
+RULE: Count comments toward character limits in inline ST; 2000-character comment plus 100-character code exceeds 2048-character inline ST limit causing compilation error.
+RULE: Use three comment styles appropriately: (* multi-line block ) for algorithm explanations, // for inline code notes, / multi-line */ for temporarily disabling code.
+________________________________________
+8. ST BIT TYPE LABEL RULES
+RULE: Always include ELSE clause when setting bit labels in conditionals; IF condition THEN bFlag:=TRUE; ELSE bFlag:=FALSE; END_IF prevents bit remaining permanently ON once set.
+RULE: Avoid OUT instruction in ST conditional statements; use assignment operators := instead of OUT(condition, output) to prevent bit label always-on behavior.
+RULE: Understand bit labels in conditional statements remain ON once set to TRUE unless explicitly reset; without explicit FALSE assignment bit stays ON permanently after first TRUE.
+________________________________________
+9. ST TIMER/COUNTER FUNCTION BLOCK RULES
+RULE: Place timer and counter function block calls outside conditional control flow when possible; call every scan using FB(Coil:=bEnable) rather than only inside IF blocks.
+RULE: When timer/counter FBs must be inside conditional blocks ensure proper execution structure; inconsistent condition and EN can prevent proper edge detection and timing.
+RULE: Validate Boolean expression in conditional statement differs for execution conditions of timer/counter function blocks; improper IF structure causes FB not executing when condition FALSE.
+________________________________________
+10. ST STRING HANDLING RULES
+RULE: Use single quotes for ASCII/Shift-JIS string literals like 'ABC'; use double quotes for Unicode string literals like "ABC"; mixing quote types causes syntax error.
+RULE: Escape dollar sign in ST string literals as $$ or hexadecimal 24; unescaped $ like 'ABC ' causes compile error at string definition location. 
+RULE: Validate string lengths before operations; ensure source strings plus null terminator fit within 255-character STRING limit to prevent truncation or compilation errors.
+RULE: Ensure NULL terminator (00H) exists within device range for string operations; functions like STRING_TO_INT require properly null-terminated strings to avoid error 2820H.
+RULE: Use STRING_TO_INT for values "-32768" to "32767"; use STRING_TO_DINT for "-2147483648" to "2147483647"; values outside ranges cause conversion error 3401H.
+RULE: Validate STRING_TO_INT/DINT input contains only ASCII codes: 30H-39H for digits, 20H for space, 2DH for minus, 00H for null; other values cause error 3401H.
+________________________________________
+11. ST RETURN STATEMENT RULES
+RULE: Use RETURN in functions for early exit from deeply nested logic; RETURN immediately exits function execution preventing unnecessary code traversal.
+RULE: Avoid RETURN in main program blocks; RETURN in programs jumps to next step only not program end, reserve for early termination in functions and function blocks.
+RULE: Understand RETURN in inline ST exits only inline box not enclosing program; program execution continues after inline ST box when RETURN used.
+________________________________________
+12. ST VARIABLE DECLARATION RULES
+RULE: Declare all variables in VAR sections at POU header before program code; variables cannot be declared inline within ST program body between BEGIN and END.
+RULE: Initialize local variables explicitly before first use; VAR section labels start with undefined values unlike global labels with configured initial values.
+RULE: Use appropriate VAR classes: VAR for local variables, VAR_INPUT for function inputs, VAR_OUTPUT for outputs, VAR_CONSTANT for constants, VAR_RETAIN for retained data.
+________________________________________
+13. ST EXPRESSION STRUCTURE RULES
+RULE: Validate expressions before loops; use IF arraySize>0 THEN FOR i:=0 TO arraySize-1 DO ... END_FOR; END_IF to prevent execution errors when array empty.
+RULE: Use separate counter variables rather than modifying loop counters; dynamic loop counter modification causes unpredictable iteration count and exit conditions.
+RULE: Flatten excessive nesting using temporary variables; temp := FUNC1(arg1); result := FUNC2(temp) reduces nesting level and improves readability over FUNC2(FUNC1(arg1)).
+RULE: Pre-calculate constant expressions outside loops; move loop-invariant calculations before FOR/WHILE/REPEAT to avoid redundant computation each iteration.
+RULE: Inline simple mathematical operations in function arguments when beneficial; result := MAX(D0+D1, D2*K2) reduces intermediate steps and improves execution speed.
+________________________________________
+14. ST MASTER CONTROL INSTRUCTION RULES
+RULE: Understand MC/MCR master control behavior differs in ST compared to ladder; statements inside IF/CASE execute differently when MC OFF with assignments not processed.
+RULE: When MC/MCR used in ST place conditional logic inside MC/MCR block rather than calling MC/MCR inside conditionals to ensure predictable execution behavior.
+RULE: Understand statements in selection statements (IF/CASE) or iteration statements (FOR/WHILE/REPEAT) not processed when master control OFF in ST.
+RULE: Outside selection/iteration statements when MC OFF assignment statements not processed but other statements not executed in ST master control logic.
+________________________________________
+15. ST OUTLINE & FORMATTING RULES
+RULE: Use outline display with nesting up to 130 levels in ST; keywords IF/END_IF, CASE/END_CASE, FOR/END_FOR, WHILE/END_WHILE, REPEAT/END_REPEAT support collapse.
+RULE: Enable automatic indentation by pressing Enter in control syntax; ST editor inserts indent automatically for IF, CASE, FOR, WHILE, REPEAT structures.
+RULE: Split long ST statements across multiple lines using spaces, tabs, line feeds inserted anywhere between operators and data for readability.
+RULE: Use syntax template display feature (Edit → Display Template) when entering complex functions to ensure correct argument data types and order.
+RULE: Enable "Vertically Align Arguments for Displaying Template" option; vertical alignment improves readability of multi-argument function calls in syntax templates.
+________________________________________
+16. ST RISING/FALLING EDGE INSTRUCTION RULES
+RULE: Use R_TRIG function block for rising edge detection in ST; ladder instructions PLS, PLF, PPLS not valid ST syntax cause compilation errors.
+RULE: Use F_TRIG function block for falling edge detection in ST; attempting to use ladder falling edge instructions causes syntax error in ST programs.
+RULE: Understand rising/falling execution instruction operation in IF/CASE differs from ladder; conditional expression and EN condition must both be satisfied for execution.
+RULE: When PLS instruction used in IF statement condition expression must be TRUE and EN must transition OFF to ON for instruction execution in ST.
+________________________________________
+17. ST WORKSHEET RULES
+RULE: Use multiple worksheets (up to 32) in single ST POU to organize complex programs by functional area; explicitly set worksheet execution order rather than relying on alphabetical default.
+RULE: Set worksheet execution order explicitly in worksheet execution order settings; default ascending order by name may not match intended program flow logic.

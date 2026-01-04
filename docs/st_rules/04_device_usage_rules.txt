@@ -1,0 +1,97 @@
+1. BIT DEVICE RULES - PHYSICAL I/O (2 Rules)
+RULE: Use device X for physical inputs from field devices such as pushbuttons, sensors, and switches.
+RULE: Use device Y for physical outputs to field devices such as contactors, lamps, solenoids, and valves.
+________________________________________
+2. BIT DEVICE RULES - INTERNAL RELAYS (6 Rules)
+RULE: Use device M for general internal relays including logic flags, interlocks, step sequences, and pulse signals.
+RULE: Use M devices in the lower range (typically M0 to M199) for non-latched transient logic that resets on power cycle.
+RULE: Use M devices in the upper range (typically M200 and above) for latched bits that must survive power-off when included in the M latch range configured in CPU parameters.
+RULE: Use device L for dedicated latch relays that store important persistent bits.
+RULE: Use L devices for critical modes, recipe selections, and status flags that must never be lost across power cycles.
+RULE: Map L devices to VAR_GLOBAL_RETAIN labels when persistent Boolean data is required.
+________________________________________
+3. BIT DEVICE RULES - SPECIAL PURPOSE (5 Rules)
+RULE: Use device S only for step relays in SFC or step-sequencer control programs.
+RULE: Do not use S devices as general-purpose flags or substitute for M devices.
+RULE: Use device B only for special link relays, communication functions, or network links as defined by module and network documentation.
+RULE: Do not use B devices as general latching memory or user-controlled flags.
+RULE: Use device SM only for special system relays with fixed meanings such as always-ON, first-scan, error flags, and clock pulses.
+________________________________________
+4. BIT DEVICE RULES - RETENTION BEHAVIOR (6 Rules)
+RULE: Device X retention follows wired input state and is always non-retentive.
+RULE: Device Y retention follows power-up state as defined by hardware configuration and CPU parameters.
+RULE: Device M retention is divided into non-latched and latched ranges as configured in CPU parameters Device/Label Memory Latch settings.
+RULE: Device L retention is always retentive when backup battery or capacitor is available.
+RULE: Device S retention behavior is tied to SFC configuration and project restart mode settings.
+RULE: Device B retention is module-defined and typically non-retentive with cyclical refresh by communication.
+________________________________________
+5. WORD DEVICE RULES - DATA REGISTERS (7 Rules)
+RULE: Use device D for general data registers storing INT, DINT, REAL, or TIME values including parameters, accumulators, and calculation results.
+RULE: Use D devices in the lower range (typically D0 to D199) for non-latched working area and scratch variables.
+RULE: Use D devices in the upper range (typically D200 and above) for latched data when included in the D latch range configured in CPU parameters.
+RULE: Store recipes, setpoints, totals, calibration data, and HMI-visible values in the latched D range.
+RULE: Use device R for file registers and extended registers when storing large structured data such as recipes, logs, and historical arrays.
+RULE: Use R devices when the D area is insufficient for structured persistent data requirements.
+RULE: Configure R device retention according to file register latch profile settings (Latch1/Latch2) in CPU parameters.
+________________________________________
+6. WORD DEVICE RULES - COMMUNICATION (3 Rules)
+RULE: Use device W for link registers dedicated to network and communication data exchange.
+RULE: Use W devices as mailbox areas for data exchange between PLC and HMI or other PLCs.
+RULE: Do not rely on W devices for long-term data storage as they are typically non-retentive and cyclically refreshed by network or module.
+________________________________________
+7. WORD DEVICE RULES - SPECIAL PURPOSE (3 Rules)
+RULE: Use device SD only for special system registers with fixed documented meanings such as error codes, clock data, and diagnostic values.
+RULE: Do not repurpose SD devices for user variables or application data.
+RULE: Use device ZR for index registers, file registers, indirect addressing, and large indexed table access.
+________________________________________
+8. TIMER DEVICE RULES (4 Rules)
+RULE: Use device T for standard non-retentive timers including on-delay, off-delay, and pulse timers.
+RULE: Use T devices for timing operations that can reset at power-up without affecting system operation.
+RULE: Use device ST for retentive timers when current value must be preserved across power-off.
+RULE: Use ST devices when elapsed time must accumulate across multiple power cycles or for run-time accumulation.
+________________________________________
+9. COUNTER DEVICE RULES (4 Rules)
+RULE: Use device C for standard counters with word-size current values.
+RULE: Use C devices for counts that may reset at startup without affecting system operation.
+RULE: Use device LC for long counters with 32-bit count values when high-range production counting is required.
+RULE: For persistent counting with C or LC devices, periodically copy the current value to latched D or R registers.
+________________________________________
+10. POINTER AND INDEX DEVICE RULES (4 Rules)
+RULE: Use device P only for pointers in CALL, JMP, and subroutine entry point definitions.
+RULE: Do not attempt to store data values in P devices as they are program-structure elements only.
+RULE: Use device Z for index registers in indirect addressing operations.
+RULE: Initialize Z register contents before use and save/restore values if used across function block calls.
+________________________________________
+11. SFC DEVICE RULES (2 Rules)
+RULE: Use device BL only for SFC block devices representing active block states in SFC programs.
+RULE: Control BL devices only via SFC control statements (SET BL, RST BL, transitions) and do not use BL as general-purpose bits.
+________________________________________
+12. STRUCTURED TEXT USAGE GUIDELINES (14 Rules)
+RULE: Map X devices to global BOOL labels and use in conditional expressions such as IF In_StartPB THEN.
+RULE: Drive Y devices via global BOOL labels using assignment statements such as Out_Motor := bMotorRun.
+RULE: Map M devices to BOOL labels and choose VAR_GLOBAL or VAR_GLOBAL_RETAIN based on required retention behavior.
+RULE: Map L devices to VAR_GLOBAL_RETAIN BOOL labels for critical persistent Boolean data.
+RULE: Access S devices only within SFC control programs and avoid using in general ST logic.
+RULE: Access B devices only where communication or module manuals define a specific purpose.
+RULE: Use SM devices for status monitoring and special conditions only, never as general user flags.
+RULE: Map D devices to INT, DINT, REAL, or TIME labels based on data type requirements.
+RULE: Use R devices with ARRAY or STRUCT labels when mapping recipes and structured archives.
+RULE: Use W devices as communication mailbox areas without expecting long-term retention.
+RULE: Read SD devices only as specified in documentation and never write to read-only SD registers.
+RULE: Use ZR devices as index offsets in expressions such as D0[ZR0] for table access.
+RULE: In ST programs, use TIMER structure type labels and access members .S, .C, .N instead of raw T devices.
+RULE: In ST programs, use RETENTIVETIMER structure type labels and access members .S, .C, .N instead of raw ST devices.
+________________________________________
+13. DEVICE RETENTION CONFIGURATION RULES (4 Rules)
+RULE: Configure M device latch range in CPU parameters under Device/Label Memory Latch settings to define which M devices retain values.
+RULE: Configure D device latch range in CPU parameters under Device/Label Memory Latch settings to define which D devices retain values.
+RULE: Configure R device latch behavior through file register latch profile settings in CPU parameters.
+RULE: Verify latch range settings match application requirements for data persistence across power cycles.
+________________________________________
+14. DEVICE RANGE RULES (6 Rules)
+RULE: Verify actual device ranges in the CPU Device List as ranges are CPU-model dependent.
+RULE: Typical X device range starts from X0 upwards depending on CPU model and installed I/O modules.
+RULE: Typical Y device range starts from Y0 upwards depending on CPU model and installed I/O modules.
+RULE: Typical M device range extends from M0 to several thousand (CPU-dependent, consult Device List).
+RULE: Typical D device range extends from D0 to several thousand (CPU-dependent, consult Device List).
+RULE: Consult CPU module documentation and Device List for exact ranges of all device types for the specific CPU model in use.

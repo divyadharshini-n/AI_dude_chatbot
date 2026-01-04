@@ -1,0 +1,134 @@
+STATEMENT TERMINATION
+RULE: Every executable statement must end with a semicolon.
+RULE: Semicolons are required after assignment statements.
+RULE: Semicolons are required after function block calls.
+RULE: Semicolons are required after function calls that do not return values.
+RULE: Control structure keywords such as END_IF, END_FOR, END_CASE do not require semicolons.
+
+IF STATEMENT SYNTAX
+RULE: IF statements begin with keyword IF followed by a boolean expression followed by keyword THEN.
+RULE: IF statements must be terminated with keyword END_IF.
+RULE: ELSIF keyword is used for additional conditional branches within an IF statement.
+RULE: ELSIF must be followed by a boolean expression and keyword THEN.
+RULE: ELSE keyword introduces the final alternative branch when all prior conditions are false.
+RULE: ELSE does not take a boolean expression or THEN keyword.
+RULE: Multiple ELSIF branches are permitted between IF and ELSE.
+RULE: ELSE branch is optional in IF statements.
+RULE: IF statements can be nested within other IF statements.
+
+BOOLEAN EXPRESSIONS
+RULE: Boolean AND operator is written as keyword AND.
+RULE: Boolean OR operator is written as keyword OR.
+RULE: Boolean NOT operator is written as keyword NOT followed by the operand.
+RULE: NOT operator can be applied to boolean expressions enclosed in parentheses.
+RULE: Parentheses are used to group boolean sub-expressions and control evaluation order.
+RULE: Comparison operators include less than, greater than, less than or equal, greater than or equal, equal, and not equal.
+RULE: Inequality operator is written as angle brackets with greater-than symbol followed by less-than symbol without space.
+
+ASSIGNMENT STATEMENTS
+RULE: Assignment operator is colon followed by equals sign without space between them.
+RULE: Assignment statements have the target variable on the left side and the expression on the right side.
+RULE: Assignment operator is distinct from equality comparison operator which is a single equals sign.
+RULE: Multiple assignments to the same variable in sequence are permitted.
+
+CASE STATEMENT SYNTAX
+RULE: CASE statements begin with keyword CASE followed by an integer expression followed by keyword OF.
+RULE: CASE statements must be terminated with keyword END_CASE.
+RULE: Each case selector is an integer literal or constant followed by a colon.
+RULE: Multiple statements can follow a case selector.
+RULE: Case selectors do not require explicit termination before the next selector.
+RULE: CASE statements support nested IF statements within case branches.
+RULE: CASE statements can be nested within other control structures.
+
+FOR LOOP SYNTAX
+RULE: FOR loops begin with keyword FOR followed by loop variable initialization.
+RULE: FOR loop initialization uses assignment operator to set the loop variable to the start value.
+RULE: Keyword TO follows the initialization and precedes the end value expression.
+RULE: Keyword DO follows the end value and precedes the loop body.
+RULE: FOR loops must be terminated with keyword END_FOR.
+RULE: Optional keyword BY specifies the increment value and appears between TO and DO.
+RULE: Default increment is positive one if BY clause is omitted.
+RULE: Keyword DOWNTO can replace TO for decrementing loops.
+RULE: Loop variable is accessible within the loop body.
+
+FUNCTION BLOCK CALL SYNTAX
+RULE: Function block calls use the instance name followed by parameter list in parentheses.
+RULE: Parameters are specified using named parameter syntax.
+RULE: Input parameters use colon-equals operator for assignment.
+RULE: Output parameters use equals-greater-than operator for retrieval.
+RULE: Multiple parameters are separated by commas.
+RULE: Parameter order is not syntactically enforced when using named parameters.
+RULE: Function block calls are statements and require semicolon termination.
+RULE: Named parameters consist of parameter name, operator, and value or variable.
+
+FUNCTION CALL SYNTAX
+RULE: Functions are called using the function name followed by parentheses.
+RULE: Function arguments can be positional or named.
+RULE: Named arguments use colon-equals operator within the function call parentheses.
+RULE: Functions that return values can be used in expressions on the right side of assignments.
+RULE: Multiple arguments are separated by commas.
+RULE: Functions can be nested within other function calls as arguments.
+
+COMMENT SYNTAX
+RULE: Single-line comments begin with two forward slashes and continue to end of line.
+RULE: Multi-line comments are enclosed between opening delimiter of left-parenthesis asterisk and closing delimiter of asterisk right-parenthesis.
+RULE: Multi-line comments are also enclosed between opening delimiter of forward-slash asterisk and closing delimiter of asterisk forward-slash.
+RULE: Comments do not affect program execution and are ignored by the compiler.
+RULE: Comments can appear on the same line as executable code.
+RULE: Comments can span multiple lines when using delimited comment syntax.
+
+LITERAL VALUES
+RULE: String literals are enclosed in single quotation marks for ASCII strings.
+RULE: Hexadecimal integer literals are prefixed with 16 followed by hash symbol.
+RULE: Numeric literals can be written as decimal integers or floating point values.
+RULE: Time literals are prefixed with T followed by hash symbol and time specification.
+RULE: Time specifications include units such as s for seconds and ms for milliseconds.
+RULE: Floating point literals use period as decimal separator.
+
+ARRAY ACCESS SYNTAX
+RULE: Array elements are accessed using array name followed by index in square brackets.
+RULE: Array indices are zero-based integer expressions.
+RULE: Array assignments can occur on either side of the assignment operator.
+RULE: Arithmetic expressions can be used as array indices.
+
+TYPE CONVERSION FUNCTIONS
+RULE: Type conversion functions use uppercase function names that indicate source and target types.
+RULE: Conversion function names follow pattern of source-type underscore TO underscore target-type.
+RULE: Type conversion functions take a single argument of the source type.
+RULE: Type conversion function calls use parentheses to enclose the argument.
+
+ARITHMETIC EXPRESSIONS
+RULE: Arithmetic operators include addition, subtraction, multiplication, and division.
+RULE: Parentheses control order of operations in arithmetic expressions.
+RULE: Division operator is forward slash.
+RULE: Multiplication operator is asterisk.
+RULE: Arithmetic expressions can span multiple operations in a single statement.
+
+DEVICE ADDRESSING SYNTAX
+RULE: Module buffer memory is addressed using U followed by module number, backslash, G, and offset number.
+RULE: Direct device names can be used in assignment statements and expressions.
+RULE: Device names beginning with letters such as M, D, C, Y, X are valid identifiers.
+RULE: Device addresses may include numeric suffixes.
+
+COMPARISON OPERATORS
+RULE: Less than operator is single left angle bracket.
+RULE: Greater than operator is single right angle bracket.
+RULE: Less than or equal operator is left angle bracket followed by equals sign.
+RULE: Greater than or equal operator is right angle bracket followed by equals sign.
+RULE: Equality comparison operator is single equals sign.
+RULE: Comparisons produce boolean results that can be used in conditional expressions.
+
+INSTRUCTION CALL SYNTAX
+RULE: Platform-specific instructions are called using uppercase instruction name followed by parameter list in parentheses.
+RULE: Instruction parameters follow the same named parameter syntax as function blocks.
+RULE: EN parameter represents enable input and uses colon-equals operator.
+RULE: ENO parameter represents enable output and uses equals-greater-than operator.
+RULE: Instructions require semicolon termination when used as statements.
+
+GENERAL STRUCTURAL RULES
+RULE: Keywords are case-insensitive but conventionally written in uppercase.
+RULE: Whitespace including spaces, tabs, and line breaks can be inserted between tokens.
+RULE: Statements can span multiple lines.
+RULE: Multiple statements can appear on a single line if each is properly terminated with semicolon.
+RULE: Identifiers must begin with a letter or underscore.
+RULE: Identifiers can contain letters, digits, and underscores.

@@ -1,0 +1,86 @@
+  1. ST STATEMENT SYNTAX RULES (3 Rules)
+RULE: Every statement in ST must end with a semicolon (;).
+RULE: Spaces, tabs, and line feeds can be inserted anywhere between operators and data in ST programs.
+RULE: A maximum of 1024 operators can be used in one ST statement.
+________________________________________
+2. ST COMMENT SYNTAX RULES (3 Rules)
+RULE: ST supports single-line comments using // from the comment symbol to the end of the line.
+RULE: ST supports multi-line comments using (* comment *) with newlines allowed inside the comment.
+RULE: ST supports multi-line comments using /* comment */ with newlines allowed inside the comment.
+________________________________________
+3. ST ASSIGNMENT STATEMENT RULES (6 Rules)
+RULE: In ST, assignment statements use the := operator: variable := expression;
+RULE: In ST assignment statements, the left side must be a variable and cannot be a constant or expression.
+RULE: In ST, timer structure contact members (.S) cannot be on the left side of assignment statements.
+RULE: In ST, timer structure coil members (.C) cannot be on the left side of assignment statements.
+RULE: In ST, counter structure contact members (.S) cannot be on the left side of assignment statements.
+RULE: In ST, counter structure coil members (.C) cannot be on the left side of assignment statements.
+________________________________________
+4. ST OPERATOR RULES (3 Rules)
+RULE: In ST expressions, if multiple operators with the same priority exist, the operation is performed from the leftmost operator.
+RULE: In ST, operator precedence follows standard mathematical order unless overridden by parentheses.
+RULE: In ST, up to 1024 operators can be used in a single statement.
+________________________________________
+5. ST CONTROL STRUCTURE RULES - IF STATEMENT (3 Rules)
+RULE: ST IF statements use the syntax: IF condition THEN statements; END_IF;
+RULE: ST supports IF-ELSIF-ELSE syntax: IF condition1 THEN statements; ELSIF condition2 THEN statements; ELSE statements; END_IF;
+RULE: In ST IF statements, only the first TRUE branch is executed; remaining ELSIF and ELSE branches are skipped.
+________________________________________
+6. ST CONTROL STRUCTURE RULES - CASE STATEMENT (2 Rules)
+RULE: ST CASE statements use the syntax: CASE expression OF value1: statements; value2: statements; ELSE statements; END_CASE;
+RULE: In ST CASE statements, only the first matching case branch is executed; remaining cases are not evaluated.
+________________________________________
+7. ST CONTROL STRUCTURE RULES - FOR LOOP (3 Rules)
+RULE: ST FOR loops use the syntax: FOR counter := start TO end BY increment DO statements; END_FOR;
+RULE: In ST FOR loops, the loop counter is incremented AFTER the loop body executes, not before.
+RULE: ST FOR loops with BY clause set to 0 create infinite loops and must be avoided.
+________________________________________
+8. ST CONTROL STRUCTURE RULES - WHILE LOOP (2 Rules)
+RULE: ST WHILE loops use the syntax: WHILE condition DO statements; END_WHILE;
+RULE: In ST WHILE loops, the condition is evaluated BEFORE the loop body executes.
+________________________________________
+9. ST CONTROL STRUCTURE RULES - REPEAT LOOP (2 Rules)
+RULE: ST REPEAT loops use the syntax: REPEAT statements; UNTIL condition; END_REPEAT;
+RULE: In ST REPEAT loops, the condition is evaluated AFTER the loop body executes, ensuring at least one execution.
+________________________________________
+10. ST LOOP CONTROL RULES (1 Rule)
+RULE: In ST loops, the EXIT statement causes immediate termination of the loop and jumps to the statement following the loop end.
+________________________________________
+11. ST RETURN STATEMENT RULES (3 Rules)
+RULE: In ST programs, the RETURN statement ends execution and jumps to the next step after the last line of the program.
+RULE: In ST function blocks, the RETURN statement ends execution and returns control to the calling POU.
+RULE: In ST functions, the RETURN statement ends execution and returns the function value to the calling expression.
+________________________________________
+12. ST FUNCTION CALLING RULES (3 Rules)
+RULE: In ST, functions can be called as expressions: result := FUNCTION_NAME(arg1, arg2);
+RULE: In ST, functions can be called as statements: FUNCTION_NAME(arg1, arg2);
+RULE: In ST, user-defined functions without return values must be called as statements with semicolon terminator.
+________________________________________
+13. ST FUNCTION BLOCK CALLING RULES (2 Rules)
+RULE: In ST, function block instances use named parameter syntax: instance_name(input1 := value1, output1 => variable1);
+RULE: In ST, function block outputs can be read using dot notation: variable := instance_name.output_label;
+________________________________________
+14. ST ARRAY INDEX SYNTAX RULES (2 Rules)
+RULE: In ST, array indices can be specified using expressions such as array_name[5+4] or array_name[i*2+1].
+RULE: In ST, multi-dimensional array indices are delimited by commas: array_name[index1, index2, index3].
+________________________________________
+15. ST TYPE CONVERSION SYNTAX RULES (4 Rules)
+RULE: In ST, explicit type conversion uses function call syntax: target_variable := TYPE1_TO_TYPE2(source_variable).
+RULE: In ST, timer current value must be explicitly converted using WORD_TO_INT function: varInt := WORD_TO_INT(TN0).
+RULE: In ST, counter current value must be explicitly converted using WORD_TO_INT function: varInt := WORD_TO_INT(CN0).
+RULE: In ST, long counter current value must be explicitly converted using DWORD_TO_DINT function: varDint := DWORD_TO_DINT(LCN0).
+________________________________________
+16. ST ARITHMETIC OPERATION TYPE PROMOTION RULES (2 Rules)
+RULE: In ST arithmetic expressions with mixed types, operands are automatically promoted to the largest type before operation: INT + REAL results in REAL.
+RULE: In ST, arithmetic operation result type matches the operand types after automatic promotion, not the assignment target type.
+________________________________________
+17. ST ASSIGNMENT CONVERSION WARNING RULES (2 Rules)
+RULE: In ST assignment statements, when assigning INT arithmetic result to DINT variable, convert operands to DINT before operation to avoid overflow: varDint := INT_TO_DINT(varInt) * K40000.
+RULE: In ST, when assigning expression result to larger data type, convert operands first rather than relying on automatic post-operation conversion.
+________________________________________
+18. ST INLINE STRUCTURED TEXT RULES (1 Rule)
+RULE: When RETURN is used in inline ST embedded in ladder programs, it ends only the inline ST block execution and does not terminate the parent program block or POU.
+________________________________________
+19. ST BIT TYPE LABEL RULES (2 Rules)
+RULE: In ST conditional statements or iteration statements, bit type labels turned ON in the statement body remain ON unless explicitly turned OFF.
+RULE: In ST, to prevent bit labels from remaining always ON, use IF-THEN-ELSE structure: IF condition THEN bitLabel := TRUE; ELSE bitLabel := FALSE; END_IF;
